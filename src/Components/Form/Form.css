@@ -1,0 +1,13 @@
+.green-tick {
+    list-style-type: none; /* Hide default bullet */
+    padding-left: 1em; /* Add space for the tick */
+  }
+  
+  .green-tick li::before {
+    content: "\2713"; /* Unicode character for checkmark */
+    color: green; /* Color of the tick */
+    display: inline-block;
+    width: 1em; /* Adjust size as needed */
+    margin-left: -1em; /* Move tick to the left to align with the text */
+  }
+  
