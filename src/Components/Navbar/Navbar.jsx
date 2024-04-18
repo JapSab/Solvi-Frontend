@@ -35,7 +35,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static" elevation={0} sx={{ backgroundColor: 'white', color: '#461646', borderBottom:'1px solid silver' }}>
+    <AppBar position="static" elevation={0} sx={{ backgroundColor: 'white', color: '#605DEC', borderBottom:'1px solid silver' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -111,14 +111,14 @@ function Navbar() {
             <Tooltip>
               <Button variant="contained"
                 sx={{
-                  color: '#461646',
+                  color: '#605DEC',
                   backgroundColor:'white',
                   border:'1px #461646',
                   borderRadius: 5,
                   height: 40,
                   width: 100,
                   '&:hover': {
-                    color: '#461646',
+                    color: '#605DEC',
                     backgroundColor: 'White',
                   }
                 }}>Help <InfoOutlinedIcon sx={{marginLeft:1 }}/></Button>

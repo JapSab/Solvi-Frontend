@@ -80,9 +80,9 @@ export default function LoginForms() {
                 fontSize: 18, 
                 width: 350, 
                 borderRadius: 30, 
-                backgroundColor:'#461646',
+                backgroundColor:'#605DEC',
                 '&:hover': {
-                backgroundColor: '#2b0f2b' 
+                backgroundColor: '#605DEC' 
                 } 
             }}
             >

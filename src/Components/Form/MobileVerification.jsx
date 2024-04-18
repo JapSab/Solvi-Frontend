@@ -47,7 +47,7 @@ function MobileVerification({ onCodeComplete }) {
             fontSize: 18, 
             width: 350, 
             borderRadius: 30, 
-            backgroundColor:'#461646',
+            backgroundColor:'#605DEC',
             '&:hover': {
               backgroundColor: '#2b0f2b' // darker purple color on hover
             } 

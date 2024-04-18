@@ -31,7 +31,7 @@ export default function Form() {
               },
             }}
           >
-            <TextsmsIcon sx={{ fontSize: 48, color: '#461646' }} />
+            <TextsmsIcon sx={{ fontSize: 48, color: '#605DEC' }} />
             <p style={{ fontSize: 21, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>What tasks can you accomplish with the assistance of Solvi?</p>
             <ul className="green-tick" style={{ textAlign: 'center', fontSize: 16, fontFamily: '"Poppins", sans-serif' }}>
               <li>You'll receive a response to any inquiry</li>

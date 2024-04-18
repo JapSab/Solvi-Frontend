@@ -10,13 +10,15 @@ import Starter from './Components/Pages/Starter';
 import Login from './Components/Pages/Login';
 import MobileVerification from './Components/Form/MobileVerification';
 import ChattingPage from './Components/Pages/Chatting';
+import Subscriptions from './Components/Pages/Subscriptions';
+import TermsConditions from './Components/Pages/TermsConditions';
 import './App.css'
 
 
 function App() {
   return( 
   <Routes>
-    <Route path='/' element={<Starter/>}/>
+    <Route path='/' element={<Homepage/>}/>
 
     <Route path='/registration' element={<Registration/>}/>
     <Route path='/login' element={<Login/>}/>

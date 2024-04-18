@@ -53,7 +53,7 @@ export default function RegistrationForms() {
     return (
       <div>
          <Fab aria-label="add"
-        style={{ marginTop:10,marginLeft:20 ,boxShadow:'none', backgroundColor: '#f6f5f800', color: '#461646' }} // Customize background and icon color here
+        style={{ marginTop:10,marginLeft:20 ,boxShadow:'none', backgroundColor: '#f6f5f800', color: '#605DEC' }} // Customize background and icon color here
         onClick={() => window.history.back()}
          >
           <ArrowBackIcon/>
@@ -71,7 +71,7 @@ export default function RegistrationForms() {
     <div>
 
       <Fab aria-label="add"
-        style={{ marginTop:10,marginLeft:20 ,boxShadow:'none', backgroundColor: '#f6f5f800', color: '#461646' }} // Customize background and icon color here
+        style={{ marginTop:10,marginLeft:20 ,boxShadow:'none', backgroundColor: '#f6f5f800', color: '#605DEC' }} // Customize background and icon color here
         onClick={() => window.history.back()}
       >
         <ArrowBackIcon/>
@@ -112,7 +112,7 @@ export default function RegistrationForms() {
             fontSize: 18, 
             width: 350, 
             borderRadius: 30, 
-            backgroundColor:'#461646',
+            backgroundColor:'#605DEC',
             '&:hover': {
               backgroundColor: '#2b0f2b' // darker purple color on hover
             } 
@@ -124,7 +124,7 @@ export default function RegistrationForms() {
 
       <Box display="flex" justifyContent="center" marginTop={2}>
         <Typography variant="body2">
-          Don't have an account? <a href="#" style={{ color: '#461646', textDecoration: 'none' }}>Log in</a>
+          Don't have an account? <a href="#" style={{ color: '#605DEC', textDecoration: 'none' }}>Log in</a>
         </Typography>
       </Box>
       <Box display="flex" justifyContent="center" marginTop={2}>

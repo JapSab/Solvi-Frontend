@@ -37,7 +37,7 @@ export default function ChatInput() {
         ))}
       </div>
       {/* Input form */}
-      <FormControl sx={{ position: 'fixed', bottom: 0, width: '70%', display: 'flex', justifyContent: 'center', margin: '0 auto' }}>
+      <FormControl sx={{ position: 'fixed', bottom: 20, width: '70%', display: 'flex', justifyContent: 'center', margin: '0 auto' }}>
   <OutlinedInput
     value={message}
     onChange={handleChange}
@@ -46,7 +46,7 @@ export default function ChatInput() {
       <InputAdornment position="end">
         <div
           style={{
-            backgroundColor: '#800080',  // Purple background
+            backgroundColor: '#605DEC',  // Purple background
             color: 'white',
             padding: '10px 10px',  // Adjusted padding for a more rectangular shape
             borderRadius: '5px',  // Less rounded corners, more rectangular

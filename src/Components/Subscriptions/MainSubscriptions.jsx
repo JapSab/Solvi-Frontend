@@ -3,8 +3,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import TextsmsIcon from '@mui/icons-material/Textsms';
-import './Form.css'
-import LoginForms from './Login';
+import SubscriptionPage from './SubscriptionPage';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -14,7 +13,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function LoginForm() {
+export default function MainSubscriptions() {
   return (
     <Box sx={{ width: 1 }}>
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
@@ -42,7 +41,7 @@ export default function LoginForm() {
         </Box>
         <Box gridColumn="span 9" sx={{backgroundColor: '#F6F5F8', height:'90vh'}}>
           {/* <Item>xs=8</Item> */}
-          <LoginForms/>
+          <SubscriptionPage/>
         </Box>
       </Box>
     </Box>
