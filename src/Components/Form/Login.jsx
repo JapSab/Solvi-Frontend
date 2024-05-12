@@ -8,7 +8,7 @@ import AppleIcon from '@mui/icons-material/Apple';
 import GoogleIcon from '@mui/icons-material/Google';
 import Fab from '@mui/material/Fab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import axios from 'axios';
 
 function validateEmail(email) {
     const re = /\S+@\S+\.\S+/;
@@ -34,6 +34,37 @@ export default function LoginForms() {
         const newPassword = event.target.value;
         setPassword(newPassword);
         setErrors({ ...errors, password: !validatePassword(newPassword) });
+    };
+
+    const handleLogin = async () => {
+        if (!validateEmail(email) || !validatePassword(password)) {
+            alert('Please enter valid email and password.');
+            return;
+        }
+        try {
+            const response = await axios.post('http://localhost:5000/api/client/login', {
+                email: email,
+                password: password
+            });
+            console.log(response.data);
+            alert('Login successful!');
+            // Possibly save the token somewhere like localStorage
+            localStorage.setItem('token', response.data.token);
+            
+        } catch (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.error('Error:', error.response.data);
+                alert(error.response.data.error);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error('Error', error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.error('Error', error.message);
+            }
+        }
     };
 
     return (
@@ -74,7 +105,7 @@ export default function LoginForms() {
         </Box>
 
         <Box display="flex" justifyContent="center" marginTop={2}>
-            <Button variant="contained" sx={{ 
+            <Button variant="contained"  onClick={handleLogin} sx={{ 
                 fontFamily: '"Poppins", sans-serif', 
                 fontWeight: 'normal', 
                 fontSize: 18, 

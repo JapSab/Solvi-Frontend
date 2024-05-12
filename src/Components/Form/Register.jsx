@@ -10,7 +10,6 @@ import Fab from '@mui/material/Fab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MobileVerification from './MobileVerification';
 
-
 function validateEmail(email) {
   const re = /\S+@\S+\.\S+/;
   return re.test(email);
@@ -19,11 +18,15 @@ function validateEmail(email) {
 function validatePassword(password) {
   return password.length >= 6;
 }
-
+function validateNumber(number) {
+  return number.length == 9;
+}
 
 export default function RegistrationForms() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [number, setNumber] = React.useState('');
+
   const [errors, setErrors] = React.useState({ email: false, password: false });
   const [currentStage, setCurrentStage] = React.useState('register'); // 'register' or 'verify'
 
@@ -40,11 +43,50 @@ export default function RegistrationForms() {
     setErrors({ ...errors, password: !validatePassword(newPassword) });
   };
 
-  const handleContinue = () => {
+  const handleNumberChange = (event) => {
+    const newNumber = event.target.value;
+    setNumber(newNumber);
+    setErrors({ ...errors, number: !validateNumber(newNumber) });
+  };
+
+  // const handleContinue = () => {
+  //   if (!errors.email && !errors.password && email && password) {
+  //     setCurrentStage('verify');
+  //   }
+  // };
+
+  const handleContinue = async () => {
     if (!errors.email && !errors.password && email && password) {
-      setCurrentStage('verify');
+      const url = "http://localhost:5000/api/client/register";  // Your API endpoint
+      const data = {
+        email: email,
+        password: password,
+        phone: number,
+        // Include other fields if necessary
+      };
+  
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+  
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const responseData = await response.json();
+        console.log('Registration successful:', responseData);
+        setCurrentStage('verify');  // Move to verification stage if registration is successful
+      } catch (error) {
+        console.error('Failed to register:', error);
+      }
     }
   };
+  
   const handleVerificationComplete = (code) => {
     console.log("Verification Code:", code);  // Handle verification logic here
   };
@@ -102,7 +144,9 @@ export default function RegistrationForms() {
           error={errors.password}
           helperText={errors.password ? 'Password must be at least 6 characters' : ''}
         />
-        <TextField id="confirm-password" label="Mobile Number" variant="outlined" sx={{ width: 350, borderRadius: 3 }} />
+        <TextField id="confirm-password" label="Mobile Number" variant="outlined" sx={{ width: 350, borderRadius: 3 }}
+        onChange={handleNumberChange}
+        />
       </Box>
 
       <Box display="flex" justifyContent="center" marginTop={2}>
