@@ -1,31 +1,30 @@
 // src/App.jsx
 import React from 'react';
-import MyComponent from './Components/HomePageComponent/HomePage';
-import ResponsiveGrid from './Components/Form/Form';
-import ChatHistory from './Components/ChatPage/Chatpage';
-import { Routes, Route} from 'react-router-dom';
-import Registration from './Components/Pages/Registration';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from './utils/AuthContext';
 import Homepage from './Components/HomePageComponent/HomePage';
-import Starter from './Components/Pages/Starter';
+import Registration from './Components/Pages/Registration';
 import Login from './Components/Pages/Login';
-import MobileVerification from './Components/Form/MobileVerification';
 import ChattingPage from './Components/Pages/Chatting';
-import Subscriptions from './Components/Pages/Subscriptions';
-import TermsConditions from './Components/Pages/TermsConditions';
-import './App.css'
-
+// import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './utils/PrivateRoute';
+import './App.css';
 
 function App() {
-  return( 
-  <Routes>
-    <Route path='/' element={<Homepage/>}/>
-
-    <Route path='/registration' element={<Registration/>}/>
-    <Route path='/login' element={<Login/>}/>
-    <Route path='/chat' element={<ChattingPage/>}/>
-
-
-  </Routes>
+  return (
+    <AuthProvider>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/chat" element={
+          <PrivateRoute>
+            <ChattingPage />
+          </PrivateRoute>
+        } />
+      </Routes>
+    </AuthProvider>
   );
 }
 

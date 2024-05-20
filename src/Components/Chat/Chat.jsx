@@ -191,32 +191,52 @@ export default function ChatInput() {
   }, [chatId]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', height: 'auto' }}>
       <div style={{
-        marginBottom: '50px', width: '70%', maxHeight: '80vh', overflowY: 'auto',
-        backgroundColor: '#f0f0f0', padding: '10px', boxSizing: 'border-box'
+        // marginBottom: '100px',
+        width: '90%',
+        maxWidth: '90vw',
+        maxHeight: '80vh',
+        overflowY: 'auto',
+        padding: '10px',
+        boxSizing: 'border-box',
+        scrollbarWidth: 'thin', // For Firefox
+        scrollbarColor: 'rgba(0,0,0,0.5) transparent' // For Firefox
       }}>
         {messages.map((msg, index) => {
           const userType = userMap[msg.author_id]?.type;
           const isCustomer = userType === 'customer';
-
+  
           return (
-            <div key={index} style={{
-              maxWidth: '60%', minHeight: '50px', padding: '10px', margin: '5px 0',
-              backgroundColor: isCustomer ? '#d1ffd6' : '#ffffff',
-              borderRadius: '10px', wordWrap: 'break-word',
-              textAlign: 'left', alignSelf: isCustomer ? 'flex-end' : 'flex-start'
-            }}>
-              {msg.text}
+            <div key={index} style={{ alignSelf: isCustomer ? 'flex-end' : 'flex-start', maxWidth: '70%' }}>
+              {isCustomer && <div style={{ color: 'black', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal', fontSize: '0.75em', marginBottom: '3px', textAlign: 'left' }}>YOU</div>}
+              {!isCustomer && <div style={{ color: 'black', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal', fontSize: '0.75em', marginBottom: '3px', textAlign: 'left' }}>SOLVI</div>}
+  
+              <div style={{
+                minHeight: '50px', 
+                fontFamily: '"Poppins", sans-serif', 
+                fontWeight: '300', 
+                padding: '10px', 
+                margin: isCustomer ? '5px 0 5px auto' : '5px auto 5px 0',
+                wordWrap: 'break-word', 
+                overflowWrap: 'break-word'
+              }}>
+                {msg.text}
+              </div>
             </div>
           );
         })}
       </div>
-      <FormControl sx={{ position: 'fixed', bottom: 20, width: '70%', display: 'flex', justifyContent: 'center', margin: '0 auto' }}>
+      <FormControl sx={{ position: 'fixed', bottom: 20, width: '50%', display: 'flex', justifyContent: 'center', margin: '0 auto' }}>
         <OutlinedInput
           value={message}
           onChange={handleChange}
           placeholder="Type your message..."
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSend();
+            }
+          }}
           endAdornment={
             <InputAdornment position="end">
               <div
@@ -238,6 +258,23 @@ export default function ChatInput() {
           }
         />
       </FormControl>
+      <style>
+        {`
+          ::-webkit-scrollbar {
+            width: 8px;
+          }
+          ::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 4px;
+          }
+          ::-webkit-scrollbar-track {
+            background: transparent;
+          }
+        `}
+      </style>
     </div>
   );
+  
+  
+  
 }
