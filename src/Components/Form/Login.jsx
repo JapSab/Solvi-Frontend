@@ -9,6 +9,8 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Fab from '@mui/material/Fab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../utils/AuthContext'; // Adjust the path accordingly
 
 function validateEmail(email) {
     const re = /\S+@\S+\.\S+/;
@@ -20,6 +22,8 @@ function validatePassword(password) {
 }
 
 export default function LoginForms() {
+    const navigate = useNavigate();
+    const { login } = useAuth(); // Get the login function from AuthContext
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errors, setErrors] = React.useState({ email: false, password: false });
@@ -46,22 +50,15 @@ export default function LoginForms() {
                 email: email,
                 password: password
             });
-            console.log(response.data);
-            alert('Login successful!');
-            // Possibly save the token somewhere like localStorage
-            localStorage.setItem('token', response.data.token);
-            
+            login(response.data.token); // Call the login function from AuthContext
+            navigate('/services'); // Redirect to /services after successful login
         } catch (error) {
             if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
                 console.error('Error:', error.response.data);
                 alert(error.response.data.error);
             } else if (error.request) {
-                // The request was made but no response was received
                 console.error('Error', error.request);
             } else {
-                // Something happened in setting up the request that triggered an Error
                 console.error('Error', error.message);
             }
         }
@@ -69,119 +66,124 @@ export default function LoginForms() {
 
     return (
         <div>
-
-        <Fab aria-label="add"
-            style={{ marginTop:10,marginLeft:20 ,boxShadow:'none', backgroundColor: '#f6f5f800', color: '#461646' }} // Customize background and icon color here
-            onClick={() => window.history.back()}
-        >
-            <ArrowBackIcon/>
-        </Fab>
-
-        <h2 style={{marginTop:80, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal'}}>Log in</h2>
-
-        
-        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop={5} gap={2}>
-        <TextField
-            id="email"
-            label="E-mail"
-            variant="outlined"
-            sx={{ width: 350, borderRadius: 3 }}
-            value={email}
-            onChange={handleEmailChange}
-            error={errors.email}
-            helperText={errors.email ? 'Invalid email address' : ''}
-            />
-            <TextField
-            id="password"
-            label="Password"
-            variant="outlined"
-            sx={{ width: 350, borderRadius: 3 }}
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-            error={errors.password}
-            helperText={errors.password ? 'Password must be at least 6 characters' : ''}
-            />
-        </Box>
-
-        <Box display="flex" justifyContent="center" marginTop={2}>
-            <Button variant="contained"  onClick={handleLogin} sx={{ 
-                fontFamily: '"Poppins", sans-serif', 
-                fontWeight: 'normal', 
-                fontSize: 18, 
-                width: 350, 
-                borderRadius: 30, 
-                backgroundColor:'#605DEC',
-                '&:hover': {
-                backgroundColor: '#605DEC' 
-                } 
-            }}
+            <Fab 
+                aria-label="add"
+                style={{ marginTop: 10, marginLeft: 20, boxShadow: 'none', backgroundColor: '#f6f5f800', color: '#461646' }}
+                onClick={() => window.history.back()}
             >
-                Continue {'>'}</Button>
-        </Box>
+                <ArrowBackIcon/>
+            </Fab>
 
-        <Box display="flex" justifyContent="center" marginTop={2}>
-            <Typography variant="body2">
-            Don't have an account? <a href="#" style={{ color: '#461646', textDecoration: 'none' }}>Log in</a>
-            </Typography>
-        </Box>
-        <Box display="flex" justifyContent="center" marginTop={2}>
-            <Button 
-            variant="contained" 
-            sx={{ 
-                fontFamily: '"Poppins", sans-serif', 
-                height:60,
-                fontWeight: 'normal', 
-                fontSize: 18, 
-                width: 350, 
-                borderRadius: 30,
-                backgroundColor: 'white', 
-                color: 'black',
-                boxShadow:0
-            }}
-            startIcon={<FacebookIcon sx={{color:'#1877F2'}}/>} 
-            >
-            Sign in with Facebook
-            </Button>
-        </Box>
-        <Box display="flex" justifyContent="center" marginTop={2}>
-            <Button 
-            variant="contained" 
-            sx={{ 
-                fontFamily: '"Poppins", sans-serif', 
-                fontWeight: 'normal', 
-                height:60,
-                fontSize: 18, 
-                width: 350, 
-                borderRadius: 30,
-                backgroundColor: 'white', 
-                color: 'black',
-                boxShadow:0
-            }}
-            startIcon={<GoogleIcon sx={{color:'#DB4437'}}/>} // Assuming you have a Google icon component
-            >
-            Sign in with Google
-            </Button>
-        </Box>
-        <Box display="flex" justifyContent="center" marginTop={2}>
-            <Button 
-            variant="contained" 
-            sx={{ 
-                fontFamily: '"Poppins", sans-serif', 
-                fontWeight: 'normal', 
-                height:60,
-                fontSize: 18, 
-                width: 350, 
-                borderRadius: 30,
-                backgroundColor: 'white', 
-                color: 'black',
-                boxShadow:0
-            }}
-            startIcon={<AppleIcon sx={{color:'#000000'}}/>} // Assuming you have a Google icon component
-            >
-            Sign in with Apple
-            </Button>
-        </Box>
+            <h2 style={{ marginTop: 80, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>Log in</h2>
+
+            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop={5} gap={2}>
+                <TextField
+                    id="email"
+                    label="E-mail"
+                    variant="outlined"
+                    sx={{ width: 350, borderRadius: 3 }}
+                    value={email}
+                    onChange={handleEmailChange}
+                    error={errors.email}
+                    helperText={errors.email ? 'Invalid email address' : ''}
+                />
+                <TextField
+                    id="password"
+                    label="Password"
+                    variant="outlined"
+                    sx={{ width: 350, borderRadius: 3 }}
+                    type="password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    error={errors.password}
+                    helperText={errors.password ? 'Password must be at least 6 characters' : ''}
+                />
+            </Box>
+
+            <Box display="flex" justifyContent="center" marginTop={2}>
+                <Button 
+                    variant="contained"
+                    onClick={handleLogin}
+                    sx={{ 
+                        fontFamily: '"Poppins", sans-serif', 
+                        fontWeight: 'normal', 
+                        fontSize: 18, 
+                        width: 350, 
+                        borderRadius: 30, 
+                        backgroundColor: '#605DEC',
+                        '&:hover': { backgroundColor: '#605DEC' } 
+                    }}
+                >
+                    Continue {'>'}
+                </Button>
+            </Box>
+
+            <Box display="flex" justifyContent="center" marginTop={2}>
+                <Typography 
+                    variant="body2"
+                    onClick={() => navigate('/registration')} 
+                >
+                    Don't have an account? <a href="#" style={{ color: '#461646', textDecoration: 'none' }}>Register</a>
+                </Typography>
+            </Box>
+
+            <Box display="flex" justifyContent="center" marginTop={2}>
+                <Button 
+                    variant="contained" 
+                    sx={{ 
+                        fontFamily: '"Poppins", sans-serif', 
+                        height: 60,
+                        fontWeight: 'normal', 
+                        fontSize: 18, 
+                        width: 350, 
+                        borderRadius: 30,
+                        backgroundColor: 'white', 
+                        color: 'black',
+                        boxShadow: 0
+                    }}
+                    startIcon={<FacebookIcon sx={{ color: '#1877F2' }}/>} 
+                >
+                    Sign in with Facebook
+                </Button>
+            </Box>
+
+            <Box display="flex" justifyContent="center" marginTop={2}>
+                <Button 
+                    variant="contained" 
+                    sx={{ 
+                        fontFamily: '"Poppins", sans-serif', 
+                        fontWeight: 'normal', 
+                        fontSize: 18, 
+                        width: 350, 
+                        borderRadius: 30,
+                        backgroundColor: 'white', 
+                        color: 'black',
+                        boxShadow: 0
+                    }}
+                    startIcon={<GoogleIcon sx={{ color: '#DB4437' }}/>} 
+                >
+                    Sign in with Google
+                </Button>
+            </Box>
+
+            <Box display="flex" justifyContent="center" marginTop={2}>
+                <Button 
+                    variant="contained" 
+                    sx={{ 
+                        fontFamily: '"Poppins", sans-serif', 
+                        fontWeight: 'normal', 
+                        fontSize: 18, 
+                        width: 350, 
+                        borderRadius: 30,
+                        backgroundColor: 'white', 
+                        color: 'black',
+                        boxShadow: 0
+                    }}
+                    startIcon={<AppleIcon sx={{ color: '#000000' }}/>} 
+                >
+                    Sign in with Apple
+                </Button>
+            </Box>
         </div>
     );
 }

@@ -9,6 +9,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Fab from '@mui/material/Fab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MobileVerification from './MobileVerification';
+import { useNavigate } from 'react-router-dom';
 
 function validateEmail(email) {
   const re = /\S+@\S+\.\S+/;
@@ -26,7 +27,7 @@ export default function RegistrationForms() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [number, setNumber] = React.useState('');
-
+  const navigate = useNavigate();
   const [errors, setErrors] = React.useState({ email: false, password: false });
   const [currentStage, setCurrentStage] = React.useState('register'); // 'register' or 'verify'
 
@@ -167,8 +168,10 @@ export default function RegistrationForms() {
       </Box>
 
       <Box display="flex" justifyContent="center" marginTop={2}>
-        <Typography variant="body2">
-          Don't have an account? <a href="#" style={{ color: '#605DEC', textDecoration: 'none' }}>Log in</a>
+        <Typography variant="body2" 
+            onClick={() => navigate('/login')} >
+
+Don't have an account? <a href="#" style={{ color: '#605DEC', textDecoration: 'none' }}>Log in</a>
         </Typography>
       </Box>
       <Box display="flex" justifyContent="center" marginTop={2}>

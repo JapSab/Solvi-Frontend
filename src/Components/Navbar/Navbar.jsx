@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,6 +17,7 @@ const pages = ['Subscription', 'Services', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -32,6 +34,13 @@ function Navbar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handlePageClick = (page) => {
+    if (page === 'Services') {
+      navigate('/services');
+    }
+    handleCloseNavMenu();
   };
 
   return (
@@ -54,6 +63,7 @@ function Navbar() {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            onClick={() => navigate('/')} 
           >
             SOLVI
           </Typography>
@@ -88,7 +98,7 @@ function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={() => handlePageClick(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -99,7 +109,7 @@ function Navbar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handlePageClick(page)}
                 sx={{ my: 2, color: 'black', display: 'block', fontSize: 15, minWidth: 120 }} // Adjusted size here
               >
                 {page}

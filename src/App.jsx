@@ -10,12 +10,19 @@ import ChattingPage from './Components/Pages/Chatting';
 // import PrivateRoute from './components/PrivateRoute';
 import PrivateRoute from './utils/PrivateRoute';
 import './App.css';
-
+import ServicesPage from './Components/Pages/ServicesPage';
+import Services from './Components/Services/Services';
+import Starter from './Components/Pages/Starter';
 function App() {
   return (
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/services" element={
+        <PrivateRoute>
+        <ServicesPage />
+         </PrivateRoute>
+        } />
+        <Route path="/" element={<Starter />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         <Route path="/chat" element={
