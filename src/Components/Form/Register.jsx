@@ -8,7 +8,6 @@ import AppleIcon from '@mui/icons-material/Apple';
 import GoogleIcon from '@mui/icons-material/Google';
 import Fab from '@mui/material/Fab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import MobileVerification from './MobileVerification';
 import { useNavigate } from 'react-router-dom';
 
 function validateEmail(email) {
@@ -19,8 +18,9 @@ function validateEmail(email) {
 function validatePassword(password) {
   return password.length >= 6;
 }
+
 function validateNumber(number) {
-  return number.length == 9;
+  return number.length === 9;
 }
 
 export default function RegistrationForms() {
@@ -29,8 +29,6 @@ export default function RegistrationForms() {
   const [number, setNumber] = React.useState('');
   const navigate = useNavigate();
   const [errors, setErrors] = React.useState({ email: false, password: false });
-  const [currentStage, setCurrentStage] = React.useState('register'); // 'register' or 'verify'
-
 
   const handleEmailChange = (event) => {
     const newEmail = event.target.value;
@@ -50,22 +48,15 @@ export default function RegistrationForms() {
     setErrors({ ...errors, number: !validateNumber(newNumber) });
   };
 
-  // const handleContinue = () => {
-  //   if (!errors.email && !errors.password && email && password) {
-  //     setCurrentStage('verify');
-  //   }
-  // };
-
   const handleContinue = async () => {
-    if (!errors.email && !errors.password && email && password) {
+    if (!errors.email && !errors.password && email && password && number) {
       const url = "http://localhost:5000/api/client/register";  // Your API endpoint
       const data = {
         email: email,
         password: password,
         phone: number,
-        // Include other fields if necessary
       };
-  
+
       try {
         const response = await fetch(url, {
           method: 'POST',
@@ -74,57 +65,33 @@ export default function RegistrationForms() {
           },
           body: JSON.stringify(data)
         });
-  
+
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-  
+
         const responseData = await response.json();
         console.log('Registration successful:', responseData);
-        setCurrentStage('verify');  // Move to verification stage if registration is successful
+        navigate('/login');  // Redirect to login page if registration is successful
       } catch (error) {
         console.error('Failed to register:', error);
       }
     }
   };
-  
-  const handleVerificationComplete = (code) => {
-    console.log("Verification Code:", code);  // Handle verification logic here
-  };
-
-  if (currentStage === 'verify') {
-    return (
-      <div>
-         <Fab aria-label="add"
-        style={{ marginTop:10,marginLeft:20 ,boxShadow:'none', backgroundColor: '#f6f5f800', color: '#605DEC' }} // Customize background and icon color here
-        onClick={() => window.history.back()}
-         >
-          <ArrowBackIcon/>
-        </Fab>
-        <Typography variant="h5" textAlign="center" marginTop={30}>Enter a One-Time code</Typography>
-        <br/>
-        <Typography variant="h6" textAlign="center">You will receive a one-time code on the specified number </Typography>
-        <br/>
-        <MobileVerification />
-      </div>
-    );
-  }
 
   return (
     <div>
-
       <Fab aria-label="add"
-        style={{ marginTop:10,marginLeft:20 ,boxShadow:'none', backgroundColor: '#f6f5f800', color: '#605DEC' }} // Customize background and icon color here
+        style={{ marginTop: 10, marginLeft: 20, boxShadow: 'none', backgroundColor: '#f6f5f800', color: '#605DEC' }}
         onClick={() => window.history.back()}
       >
-        <ArrowBackIcon/>
+        <ArrowBackIcon />
       </Fab>
 
-      <h2 style={{marginTop:80, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal'}}>Registration</h2>
+      <h2 style={{ marginTop: 80, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>Registration</h2>
 
-     
-       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop={5} gap={2}>
-       <TextField
+      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop={5} gap={2}>
+        <TextField
           id="email"
           label="E-mail"
           variant="outlined"
@@ -145,88 +112,96 @@ export default function RegistrationForms() {
           error={errors.password}
           helperText={errors.password ? 'Password must be at least 6 characters' : ''}
         />
-        <TextField id="confirm-password" label="Mobile Number" variant="outlined" sx={{ width: 350, borderRadius: 3 }}
-        onChange={handleNumberChange}
+        <TextField
+          id="confirm-password"
+          label="Mobile Number"
+          variant="outlined"
+          sx={{ width: 350, borderRadius: 3 }}
+          value={number}
+          onChange={handleNumberChange}
+          error={errors.number}
+          helperText={errors.number ? 'Mobile number must be 9 digits' : ''}
         />
       </Box>
 
       <Box display="flex" justifyContent="center" marginTop={2}>
-        <Button variant="contained" sx={{ 
-            fontFamily: '"Poppins", sans-serif', 
-            fontWeight: 'normal', 
-            fontSize: 18, 
-            width: 350, 
-            borderRadius: 30, 
-            backgroundColor:'#605DEC',
-            '&:hover': {
-              backgroundColor: '#2b0f2b' // darker purple color on hover
-            } 
-          }}
+        <Button variant="contained" sx={{
+          fontFamily: '"Poppins", sans-serif',
+          fontWeight: 'normal',
+          fontSize: 18,
+          width: 350,
+          borderRadius: 30,
+          backgroundColor: '#605DEC',
+          '&:hover': {
+            backgroundColor: '#2b0f2b' // darker purple color on hover
+          }
+        }}
           onClick={handleContinue}
         >
-            Continue {'>'}</Button>
+          Continue {'>'}
+        </Button>
       </Box>
 
       <Box display="flex" justifyContent="center" marginTop={2}>
-        <Typography variant="body2" 
-            onClick={() => navigate('/login')} >
+        <Typography variant="body2"
+          onClick={() => navigate('/login')} >
 
-Don't have an account? <a href="#" style={{ color: '#605DEC', textDecoration: 'none' }}>Log in</a>
+          Don't have an account? <a href="#" style={{ color: '#605DEC', textDecoration: 'none' }}>Log in</a>
         </Typography>
       </Box>
       <Box display="flex" justifyContent="center" marginTop={2}>
-        <Button 
-          variant="contained" 
-          sx={{ 
-            fontFamily: '"Poppins", sans-serif', 
-            height:60,
-            fontWeight: 'normal', 
-            fontSize: 18, 
-            width: 350, 
+        <Button
+          variant="contained"
+          sx={{
+            fontFamily: '"Poppins", sans-serif',
+            height: 60,
+            fontWeight: 'normal',
+            fontSize: 18,
+            width: 350,
             borderRadius: 30,
-            backgroundColor: 'white', 
+            backgroundColor: 'white',
             color: 'black',
-            boxShadow:0
+            boxShadow: 0
           }}
-          startIcon={<FacebookIcon sx={{color:'#1877F2'}}/>} // Assuming you have a Google icon component
+          startIcon={<FacebookIcon sx={{ color: '#1877F2' }} />}
         >
           Sign in with Facebook
         </Button>
       </Box>
       <Box display="flex" justifyContent="center" marginTop={2}>
-        <Button 
-          variant="contained" 
-          sx={{ 
-            fontFamily: '"Poppins", sans-serif', 
-            fontWeight: 'normal', 
-            height:60,
-            fontSize: 18, 
-            width: 350, 
+        <Button
+          variant="contained"
+          sx={{
+            fontFamily: '"Poppins", sans-serif',
+            fontWeight: 'normal',
+            height: 60,
+            fontSize: 18,
+            width: 350,
             borderRadius: 30,
-            backgroundColor: 'white', 
+            backgroundColor: 'white',
             color: 'black',
-            boxShadow:0
+            boxShadow: 0
           }}
-          startIcon={<GoogleIcon sx={{color:'#DB4437'}}/>} // Assuming you have a Google icon component
+          startIcon={<GoogleIcon sx={{ color: '#DB4437' }} />}
         >
           Sign in with Google
         </Button>
       </Box>
       <Box display="flex" justifyContent="center" marginTop={2}>
-        <Button 
-          variant="contained" 
-          sx={{ 
-            fontFamily: '"Poppins", sans-serif', 
-            fontWeight: 'normal', 
-            height:60,
-            fontSize: 18, 
-            width: 350, 
+        <Button
+          variant="contained"
+          sx={{
+            fontFamily: '"Poppins", sans-serif',
+            fontWeight: 'normal',
+            height: 60,
+            fontSize: 18,
+            width: 350,
             borderRadius: 30,
-            backgroundColor: 'white', 
+            backgroundColor: 'white',
             color: 'black',
-            boxShadow:0
+            boxShadow: 0
           }}
-          startIcon={<AppleIcon sx={{color:'#000000'}}/>} // Assuming you have a Google icon component
+          startIcon={<AppleIcon sx={{ color: '#000000' }} />}
         >
           Sign in with Apple
         </Button>

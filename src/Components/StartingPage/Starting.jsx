@@ -40,7 +40,6 @@ export default function StarterPage() {
           </Box>
         </Box>
         <Box gridColumn="span 9" sx={{backgroundColor: '#F6F5F8', height:'90vh'}}>
-          {/* <Item>xs=8</Item> */}
           <LoginSignup/>
         </Box>
       </Box>
