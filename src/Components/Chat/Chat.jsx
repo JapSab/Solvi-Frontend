@@ -5,12 +5,15 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import SendIcon from '@mui/icons-material/Send';
+import { BACKEND_URI } from '../../config';
+
 
 export default function ChatInput() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [userMap, setUserMap] = useState({});
   const [chatId, setChatId] = useState('');
+  const apiUrl = BACKEND_URI;
 
   const handleChange = (event) => {
     setMessage(event.target.value);
@@ -29,7 +32,7 @@ export default function ChatInput() {
       };
 
       try {
-        const response = await axios.post('http://localhost:5000/call_livechat', chatMessage, {
+        const response = await axios.post(`${apiUrl}/call_livechat`, chatMessage, {
           headers: {
             'Authorization': `Bearer ${Cookies.get('access_token')}`,
             'Content-Type': 'application/json'
@@ -62,7 +65,7 @@ export default function ChatInput() {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/call_livechat', chatRequest, {
+      const response = await axios.post(`${apiUrl}/call_livechat`, chatRequest, {
         headers: {
           'Authorization': `Bearer ${Cookies.get('access_token')}`,
           'Content-Type': 'application/json'
@@ -98,7 +101,7 @@ export default function ChatInput() {
 
   const fetchChatSummary = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/call_livechat', {
+      const response = await axios.post(`${apiUrl}/call_livechat`, {
         action: "list_chats"
       }, {
         headers: {
@@ -133,7 +136,7 @@ export default function ChatInput() {
     }
 
     try {
-      const response = await axios.get('http://localhost:5000/get_customer_token', {
+      const response = await axios.get(`${apiUrl}/get_customer_token`, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -154,7 +157,7 @@ export default function ChatInput() {
 
   const startNewChat = async (token) => {
     try {
-      const response = await axios.post('http://localhost:5000/call_livechat', {
+      const response = await axios.post(`${apiUrl}/call_livechat`, {
         action: "start_chat"
       }, {
         headers: {

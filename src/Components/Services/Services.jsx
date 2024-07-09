@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import './Services.css';
 import { useNavigate } from 'react-router-dom';
 import PaymentConfirmationModal from './PaymentConfirmationModal'; // import the modal
+import { BACKEND_URI, FRONTEND_URI } from '../../config';
 
 const Services = () => {
   const navigate = useNavigate();
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const apiUrl = BACKEND_URI;
+  const frontUrl = FRONTEND_URI;
 
   const handleCardClick = (packageId) => {
     setSelectedPackage(packageId);
@@ -19,7 +22,7 @@ const Services = () => {
   };
 
   const handleConfirmPayment = () => {
-    fetch('http://localhost:5000/call_tbcpay', {
+    fetch(`${apiUrl}/call_tbcpay`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -27,7 +30,7 @@ const Services = () => {
       body: JSON.stringify({
         action: "create_payment",
         packageId: selectedPackage,
-        returnurl: 'http://localhost:5173/chat' // replace with your actual return URL
+        returnurl: `${frontUrl}/chat`
       })
     })
     .then(response => response.json())

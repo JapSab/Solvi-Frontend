@@ -11,7 +11,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext'; // Adjust the path accordingly
-
+import { BACKEND_URI } from '../../config';
 function validateEmail(email) {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
@@ -23,6 +23,7 @@ function validatePassword(password) {
 
 export default function LoginForms() {
     const navigate = useNavigate();
+    const apiUrl = BACKEND_URI;
     const { login } = useAuth(); // Get the login function from AuthContext
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -46,7 +47,7 @@ export default function LoginForms() {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:5000/api/client/login', {
+            const response = await axios.post(`${apiUrl}/api/client/login`, {
                 email: email,
                 password: password
             });

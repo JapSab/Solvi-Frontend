@@ -9,6 +9,8 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Fab from '@mui/material/Fab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import { BACKEND_URI } from '../../config';
+
 
 function validateEmail(email) {
   const re = /\S+@\S+\.\S+/;
@@ -24,6 +26,7 @@ function validateNumber(number) {
 }
 
 export default function RegistrationForms() {
+  const apiUrl = BACKEND_URI;
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [number, setNumber] = React.useState('');
@@ -50,7 +53,7 @@ export default function RegistrationForms() {
 
   const handleContinue = async () => {
     if (!errors.email && !errors.password && email && password && number) {
-      const url = "http://localhost:5000/api/client/register";  // Your API endpoint
+      const url = `${apiUrl}/api/client/register`;  // Your API endpoint
       const data = {
         email: email,
         password: password,
