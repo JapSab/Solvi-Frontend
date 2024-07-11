@@ -12,6 +12,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext'; // Adjust the path accordingly
 import { BACKEND_URI } from '../../config';
+import Cookies from 'js-cookie';
+
 function validateEmail(email) {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
@@ -51,7 +53,9 @@ export default function LoginForms() {
                 email: email,
                 password: password
             });
-            login(response.data.token); // Call the login function from AuthContext
+            login(response.data.token);
+            Cookies.set('email', email);
+
             navigate('/services'); // Redirect to /services after successful login
         } catch (error) {
             if (error.response) {
