@@ -6,16 +6,23 @@ import ChatterPage from '../Chat/ChatterPage';
 import { BACKEND_URI } from '../../config';
 
 function ChattingPage() {
-  const [loading, setLoading] = useState(true);
+  const [hasAccess, setHasAccess] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAccess = async () => {
+      const chatCookie = Cookies.get('chat_cookie');
+      if (chatCookie) {
+        setHasAccess(true); // Chat cookie found, allow rendering of the page
+        return;
+      }
+
       const payToken = Cookies.get('pay_token');
       if (!payToken) {
         navigate('/services');
         return;
       }
+
       try {
         const response = await fetch(`${BACKEND_URI}/call_tbcpay`, {
           method: 'POST',
@@ -25,14 +32,15 @@ function ChattingPage() {
           body: JSON.stringify({
             action: 'get_payment',
             email: Cookies.get('email'),
-            payment_id: Cookies.get('pay_token'), // Example data, replace with actual data
+            payment_id: payToken, // Example data, replace with actual data
           }),
         });
 
         const data = await response.json();
-        if (data.Succeeded) {
-          setLoading(false);
-          Cookies.remove('pay_token');
+
+        if (data.status === "Succeeded") {
+          Cookies.set('chat_cookie', 'true', { expires: 1 }); // Set chat_cookie with a 1-day expiration
+          setHasAccess(true); // Update state to trigger re-render
         } else {
           navigate('/services');
         }
@@ -45,8 +53,8 @@ function ChattingPage() {
     checkAccess();
   }, [navigate]);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (!hasAccess) {
+    return null; // Do not render anything until checkAccess runs
   }
 
   return (

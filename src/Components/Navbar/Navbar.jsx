@@ -15,8 +15,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useAuth } from '../../utils/AuthContext';
 import LogoutModal from './LogoutModal';
 
-const pages = ['Services'];
-// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Services', 'About Us', 'Contact Us', 'How To Use', 'News'];
 
 function Navbar() {
   const navigate = useNavigate();
@@ -24,20 +23,14 @@ function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [language, setLanguage] = useState('ENG');
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   const handlePageClick = (page) => {
@@ -58,6 +51,11 @@ function Navbar() {
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const toggleLanguage = () => {
+    setLanguage((prevLanguage) => (prevLanguage === 'ENG' ? 'GEO' : 'ENG'));
+    // Add your language change logic here if needed
   };
 
   return (
@@ -120,6 +118,9 @@ function Navbar() {
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
+                <MenuItem onClick={toggleLanguage}>
+                  <Typography textAlign="center">{language}</Typography>
+                </MenuItem>
               </Menu>
             </Box>
 
@@ -128,11 +129,17 @@ function Navbar() {
                 <Button
                   key={page}
                   onClick={() => handlePageClick(page)}
-                  sx={{ my: 2, color: 'black', display: 'block', fontSize: 15, minWidth: 120 }} // Adjusted size here
+                  sx={{ my: 2, color: 'black', display: 'block', fontSize: 15, minWidth: 120 }}
                 >
                   {page}
                 </Button>
               ))}
+              <Button
+                onClick={toggleLanguage}
+                sx={{ my: 2, color: 'black', display: 'block', fontSize: 15, minWidth: 120 }}
+              >
+                {language}
+              </Button>
             </Box>
 
             <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
@@ -166,7 +173,7 @@ function Navbar() {
                       borderRadius: 2,
                       height: 40,
                       width: 100,
-                      ml: 2, // Add margin to the left for spacing
+                      ml: 2,
                       '&:hover': {
                         color: 'red',
                         backgroundColor: 'White',

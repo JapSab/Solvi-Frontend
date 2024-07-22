@@ -58,7 +58,7 @@ export default function LoginSignup() {
                 color: 'white',
                 boxShadow:0
               }}
-              onClick={() => window.location.href = '/services'} // For the Sign Up button
+              onClick={() => window.location.href = '/registration'} // For the Sign Up button
             >
               Sign Up
             </Button>

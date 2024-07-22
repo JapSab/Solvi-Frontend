@@ -230,7 +230,7 @@ export default function ChatInput() {
           );
         })}
       </div>
-      <FormControl sx={{ position: 'fixed', bottom: 20, width: '50%', display: 'flex', justifyContent: 'center', margin: '0 auto' }}>
+      <FormControl sx={{ position: 'fixed', bottom: 50, width: '50%', display: 'flex', justifyContent: 'center', margin: '0 auto' }}>
         <OutlinedInput
           value={message}
           onChange={handleChange}
