@@ -7,6 +7,8 @@ import { BACKEND_URI } from '../../config';
 
 function ChattingPage() {
   const [hasAccess, setHasAccess] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [countdown, setCountdown] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,8 +41,10 @@ function ChattingPage() {
         const data = await response.json();
 
         if (data.status === "Succeeded") {
-          Cookies.set('chat_cookie', 'true', { expires: 1 }); // Set chat_cookie with a 1-day expiration
+          Cookies.set('chat_cookie', 'true', { expires: 0.0208333 }); // Set chat_cookie with a 30-second expiration
           setHasAccess(true); // Update state to trigger re-render
+          Cookies.remove('pay_token');
+
         } else {
           navigate('/services');
         }
@@ -53,6 +57,35 @@ function ChattingPage() {
     checkAccess();
   }, [navigate]);
 
+  useEffect(() => {
+    const checkCookieExpiration = setInterval(() => {
+      const chatCookie = Cookies.get('chat_cookie');
+      if (!chatCookie && hasAccess) {
+        setShowPopup(true); // Show popup if chat_cookie is expired
+      }
+    }, 1000); // Check every second
+
+    return () => clearInterval(checkCookieExpiration);
+  }, [hasAccess]);
+
+  useEffect(() => {
+    if (showPopup) {
+      const timer = setInterval(() => {
+        setCountdown(prevCountdown => {
+          if (prevCountdown <= 1) {
+            clearInterval(timer);
+            Cookies.remove('access_token');
+            navigate('/services'); // Redirect to the main page after countdown reaches 0
+            return 0;
+          }
+          return prevCountdown - 1;
+        });
+      }, 1000); // Countdown every second
+
+      return () => clearInterval(timer);
+    }
+  }, [showPopup, navigate]);
+
   if (!hasAccess) {
     return null; // Do not render anything until checkAccess runs
   }
@@ -61,8 +94,25 @@ function ChattingPage() {
     <div>
       <Navbar />
       <ChatterPage />
+      {showPopup && (
+        <div style={popupStyle}>
+          <p>The chat is over. Redirecting to the main page in {countdown} seconds...</p>
+        </div>
+      )}
     </div>
   );
 }
+
+const popupStyle = {
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  backgroundColor: 'white',
+  padding: '20px',
+  border: '2px solid #605DEC',
+  boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
+  zIndex: 1000, // Ensure the popup overlays the whole website
+};
 
 export default ChattingPage;
