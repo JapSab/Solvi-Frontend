@@ -25,8 +25,12 @@
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "formik": "^2.4.5",
+    "i18next": "^23.12.2",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "i18next-http-backend": "^2.5.2",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
+    "react-i18next": "^15.0.0",
     "react-router-dom": "^6.22.3",
     "vite-plugin-env-compatible": "^2.0.1",
     "yup": "^1.4.0"

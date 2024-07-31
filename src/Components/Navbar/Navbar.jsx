@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -14,16 +14,52 @@ import MenuItem from '@mui/material/MenuItem';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useAuth } from '../../utils/AuthContext';
 import LogoutModal from './LogoutModal';
+import LanguageContext from '../../utils/LanguageContext';
+import './Navbar.css'; // Import the CSS file for animations
 
-const pages = ['About Us', 'Services', 'Contact Us', 'How To Use', 'News'];
+const translations = {
+  ENG: {
+    pages: ['About Us', 'Services', 'Contact Us', 'How To Use', 'News'],
+    help: 'Help',
+    login: 'Login',
+    signUp: 'Sign Up',
+  },
+  GEO: {
+    pages: ['ჩვენ შესახებ', 'სერვისები', 'დაგვიკავშირდით', 'როგორ გამოვიყენოთ', 'ახალი ამბები'],
+    help: 'დახმარება',
+    login: 'შესვლა',
+    signUp: 'რეგისტრაცია',
+  },
+};
 
 function Navbar() {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [language, setLanguage] = useState('ENG');
+  const { language, toggleLanguage } = useContext(LanguageContext);
+  const [transitionState, setTransitionState] = useState('fade-in');
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (transitionState === 'fade-out') {
+      const timer = setTimeout(() => {
+        setVisible(false);
+        setTransitionState('fade-in');
+      }, 500); // Match this duration with the CSS animation duration
+      return () => clearTimeout(timer);
+    } else if (transitionState === 'fade-in') {
+      setVisible(true);
+    }
+  }, [transitionState]);
+
+  const handleToggleLanguage = () => {
+    setTransitionState('fade-out');
+    setTimeout(() => {
+      toggleLanguage();
+      setTransitionState('fade-in');
+    }, 500); // Match this duration with the CSS animation duration
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -34,9 +70,9 @@ function Navbar() {
   };
 
   const handlePageClick = (page) => {
-    if (page === 'Services') {
+    if (page === 'Services' || page === 'სერვისები') {
       navigate('/services');
-    }else if (page === 'About Us') {
+    } else if (page === 'About Us' || page === 'ჩვენ შესახებ') {
       navigate('/about-us');
     }
     handleCloseNavMenu();
@@ -55,9 +91,12 @@ function Navbar() {
     navigate('/login');
   };
 
-  const toggleLanguage = () => {
-    setLanguage((prevLanguage) => (prevLanguage === 'ENG' ? 'GEO' : 'ENG'));
-    // Add your language change logic here if needed
+  const navItemStyle = {
+    my: 2,
+    color: 'black',
+    display: 'block',
+    fontSize: 15,
+    padding: '0 15px', // Adjust padding for better spacing
   };
 
   return (
@@ -115,64 +154,41 @@ function Navbar() {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={() => handlePageClick(page)}>
+                {translations[language].pages.map((page) => (
+                  <MenuItem key={page} onClick={() => handlePageClick(page)} className={transitionState}>
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
-                <MenuItem onClick={toggleLanguage}>
+                <MenuItem onClick={handleToggleLanguage} className={transitionState}>
                   <Typography textAlign="center">{language}</Typography>
                 </MenuItem>
                 {!isAuthenticated && (
                   <>
-                    <MenuItem onClick={() => navigate('/login')}>
-                      <Typography textAlign="center">Login</Typography>
+                    <MenuItem onClick={() => navigate('/login')} className={transitionState}>
+                      <Typography textAlign="center">{translations[language].login}</Typography>
                     </MenuItem>
-                    <MenuItem onClick={() => navigate('/registration')}>
-                      <Typography textAlign="center">Sign Up</Typography>
+                    <MenuItem onClick={() => navigate('/registration')} className={transitionState}>
+                      <Typography textAlign="center">{translations[language].signUp}</Typography>
                     </MenuItem>
                   </>
                 )}
               </Menu>
             </Box>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center', gap: 2 }} className={transitionState}>
+              {visible && translations[language].pages.map((page) => (
                 <Button
                   key={page}
                   onClick={() => handlePageClick(page)}
-                  sx={{ my: 2, color: 'black', display: 'block', fontSize: 15, minWidth: 120 }}
+                  sx={navItemStyle}
                 >
                   {page}
                 </Button>
               ))}
-              <Button onClick={toggleLanguage} sx={{ my: 2, color: 'black', display: 'block', fontSize: 15, minWidth: 120 }}>
-                {language}
-              </Button>
             </Box>
 
-            <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
-              <Tooltip>
-                <Button
-                  variant="contained"
-                  sx={{
-                    color: 'black',
-                    backgroundColor: '#dbdbdb',
-                    border: '1px #461646',
-                    borderRadius: 2,
-                    height: 40,
-                    width: 100,
-                    marginRight:2,
-                    '&:hover': {
-                      color: '#841E60',
-                      backgroundColor: 'White',
-                    },
-                  }}
-                >
-                  Help <InfoOutlinedIcon sx={{ marginLeft: 1 }} />
-                </Button>
-              </Tooltip>
-              {isAuthenticated ? (
+            <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', gap: 2 }} className={transitionState}>
+              {visible && (
                 <Tooltip>
                   <Button
                     variant="contained"
@@ -182,61 +198,90 @@ function Navbar() {
                       border: '1px #461646',
                       borderRadius: 2,
                       height: 40,
-                      width: 100,
-                      ml: 2,
+                      width: 120,
                       '&:hover': {
-                        color: 'red',
+                        color: '#841E60',
                         backgroundColor: 'White',
                       },
                     }}
-                    onClick={handleOpenModal}
                   >
-                    Logout
+                    {translations[language].help} <InfoOutlinedIcon sx={{ marginLeft: 1 }} />
                   </Button>
                 </Tooltip>
+              )}
+              {isAuthenticated ? (
+                visible && (
+                  <Tooltip>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        color: 'black',
+                        backgroundColor: '#dbdbdb',
+                        border: '1px #461646',
+                        borderRadius: 2,
+                        height: 40,
+                        width: 120,
+                        '&:hover': {
+                          color: 'red',
+                          backgroundColor: 'White',
+                        },
+                      }}
+                      onClick={handleOpenModal}
+                    >
+                      Logout
+                    </Button>
+                  </Tooltip>
+                )
               ) : (
-                <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-                  <Tooltip>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        color: 'black',
-                        backgroundColor: '#dbdbdb',
-                        border: '1px #461646',
-                        borderRadius: 2,
-                        height: 40,
-                        width: 100,
-                        '&:hover': {
-                          color: '#841E60',
-                          backgroundColor: 'White',
-                        },
-                      }}
-                      onClick={() => navigate('/login')}
-                    >
-                      Login
-                    </Button>
-                  </Tooltip>
-                  <Tooltip>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        color: 'black',
-                        backgroundColor: '#dbdbdb',
-                        border: '1px #461646',
-                        borderRadius: 2,
-                        height: 40,
-                        width: 100,
-                        '&:hover': {
-                          color: '#841E60',
-                          backgroundColor: 'White',
-                        },
-                      }}
-                      onClick={() => navigate('/registration')}
-                    >
-                      Sign Up
-                    </Button>
-                  </Tooltip>
-                </Box>
+                visible && (
+                  <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+                    <Tooltip>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          color: 'black',
+                          backgroundColor: '#dbdbdb',
+                          border: '1px #461646',
+                          borderRadius: 2,
+                          height: 40,
+                          width: 120,
+                          '&:hover': {
+                            color: '#841E60',
+                            backgroundColor: 'White',
+                          },
+                        }}
+                        onClick={() => navigate('/login')}
+                      >
+                        {translations[language].login}
+                      </Button>
+                    </Tooltip>
+                    <Tooltip>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          color: 'black',
+                          backgroundColor: '#dbdbdb',
+                          border: '1px #461646',
+                          borderRadius: 2,
+                          height: 40,
+                          width: 120,
+                          '&:hover': {
+                            color: '#841E60',
+                            backgroundColor: 'White',
+                          },
+                        }}
+                        onClick={() => navigate('/registration')}
+                      >
+                        {translations[language].signUp}
+                      </Button>
+                    </Tooltip>
+                  </Box>
+                )
+              )}
+              {visible && (
+                <Button onClick={handleToggleLanguage} sx={navItemStyle}>
+                  {language}
+                </Button>
               )}
             </Box>
           </Toolbar>
