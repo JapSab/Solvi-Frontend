@@ -15,7 +15,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useAuth } from '../../utils/AuthContext';
 import LogoutModal from './LogoutModal';
 
-const pages = ['Services', 'About Us', 'Contact Us', 'How To Use', 'News'];
+const pages = ['About Us', 'Services', 'Contact Us', 'How To Use', 'News'];
 
 function Navbar() {
   const navigate = useNavigate();
@@ -36,6 +36,8 @@ function Navbar() {
   const handlePageClick = (page) => {
     if (page === 'Services') {
       navigate('/services');
+    }else if (page === 'About Us') {
+      navigate('/about-us');
     }
     handleCloseNavMenu();
   };
@@ -60,7 +62,7 @@ function Navbar() {
 
   return (
     <>
-      <AppBar position="static" elevation={0} sx={{ backgroundColor: 'white', color: '#605DEC', borderBottom: '1px solid silver' }}>
+      <AppBar position="static" elevation={0} sx={{ backgroundColor: 'white', color: '#841E60', borderBottom: '1px solid silver' }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -77,7 +79,7 @@ function Navbar() {
                 letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
               onClick={() => navigate('/')}
             >
@@ -121,6 +123,16 @@ function Navbar() {
                 <MenuItem onClick={toggleLanguage}>
                   <Typography textAlign="center">{language}</Typography>
                 </MenuItem>
+                {!isAuthenticated && (
+                  <>
+                    <MenuItem onClick={() => navigate('/login')}>
+                      <Typography textAlign="center">Login</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate('/registration')}>
+                      <Typography textAlign="center">Sign Up</Typography>
+                    </MenuItem>
+                  </>
+                )}
               </Menu>
             </Box>
 
@@ -134,10 +146,7 @@ function Navbar() {
                   {page}
                 </Button>
               ))}
-              <Button
-                onClick={toggleLanguage}
-                sx={{ my: 2, color: 'black', display: 'block', fontSize: 15, minWidth: 120 }}
-              >
+              <Button onClick={toggleLanguage} sx={{ my: 2, color: 'black', display: 'block', fontSize: 15, minWidth: 120 }}>
                 {language}
               </Button>
             </Box>
@@ -153,16 +162,17 @@ function Navbar() {
                     borderRadius: 2,
                     height: 40,
                     width: 100,
+                    marginRight:2,
                     '&:hover': {
-                      color: '#605DEC',
+                      color: '#841E60',
                       backgroundColor: 'White',
-                    }
+                    },
                   }}
                 >
                   Help <InfoOutlinedIcon sx={{ marginLeft: 1 }} />
                 </Button>
               </Tooltip>
-              {isAuthenticated && (
+              {isAuthenticated ? (
                 <Tooltip>
                   <Button
                     variant="contained"
@@ -177,13 +187,56 @@ function Navbar() {
                       '&:hover': {
                         color: 'red',
                         backgroundColor: 'White',
-                      }
+                      },
                     }}
                     onClick={handleOpenModal}
                   >
                     Logout
                   </Button>
                 </Tooltip>
+              ) : (
+                <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+                  <Tooltip>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        color: 'black',
+                        backgroundColor: '#dbdbdb',
+                        border: '1px #461646',
+                        borderRadius: 2,
+                        height: 40,
+                        width: 100,
+                        '&:hover': {
+                          color: '#841E60',
+                          backgroundColor: 'White',
+                        },
+                      }}
+                      onClick={() => navigate('/login')}
+                    >
+                      Login
+                    </Button>
+                  </Tooltip>
+                  <Tooltip>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        color: 'black',
+                        backgroundColor: '#dbdbdb',
+                        border: '1px #461646',
+                        borderRadius: 2,
+                        height: 40,
+                        width: 100,
+                        '&:hover': {
+                          color: '#841E60',
+                          backgroundColor: 'White',
+                        },
+                      }}
+                      onClick={() => navigate('/registration')}
+                    >
+                      Sign Up
+                    </Button>
+                  </Tooltip>
+                </Box>
               )}
             </Box>
           </Toolbar>

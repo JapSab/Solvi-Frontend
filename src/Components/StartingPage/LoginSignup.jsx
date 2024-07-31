@@ -35,9 +35,12 @@ export default function LoginSignup() {
               fontSize: 18, 
               width: 150, 
               borderRadius: 30,
-              backgroundColor: '#605DEC', 
+              backgroundColor: '#841E60', 
               color: 'white',
-              boxShadow:0
+              boxShadow:0,
+              '&:hover': {
+                backgroundColor: '#EB7745' // Adjust hover color as needed
+              }
             }}
             onClick={() => window.location.href = '/services'} // For the Services button
           >
@@ -52,33 +55,20 @@ export default function LoginSignup() {
                 height:60,
                 fontWeight: 'normal', 
                 fontSize: 18, 
-                width: 150, 
+                width: 200, 
                 borderRadius: 30,
-                backgroundColor: '#605DEC', 
+                backgroundColor: '#841E60', 
                 color: 'white',
-                boxShadow:0
+                boxShadow:0,
+                '&:hover': {
+                  backgroundColor: '#EB7745' // Adjust hover color as needed
+                }
               }}
               onClick={() => window.location.href = '/registration'} // For the Sign Up button
             >
-              Sign Up
+              დასვი შეკითხვა
             </Button>
-            <Button 
-              variant="contained" 
-              sx={{ 
-                fontFamily: '"Poppins", sans-serif', 
-                fontWeight: 'normal', 
-                height:60,
-                fontSize: 18, 
-                width: 150, 
-                borderRadius: 30,
-                backgroundColor: '#605DEC', 
-                color: 'white',
-                boxShadow:0
-              }}
-              onClick={() => window.location.href = '/login'} // For the Log In button
-            >
-              Log In
-            </Button>
+         
           </>
         )}
       </Box>

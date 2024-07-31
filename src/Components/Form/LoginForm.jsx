@@ -36,7 +36,7 @@ export default function LoginForm() {
                 },
               }}
             >
-              <TextsmsIcon sx={{ fontSize: 48, color: '#605DEC' }} />
+              <TextsmsIcon sx={{ fontSize: 48, color: '#841E60' }} />
               <p style={{ fontSize: 21, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>
                 What tasks can you accomplish with the assistance of Solvi?
               </p>

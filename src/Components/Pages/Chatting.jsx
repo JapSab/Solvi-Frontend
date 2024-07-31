@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie'; // Assuming you are using js-cookie for managing cookies
+import Cookies from 'js-cookie';
 import Navbar from '../Navbar/Navbar';
 import ChatterPage from '../Chat/ChatterPage';
 import { BACKEND_URI } from '../../config';
@@ -15,12 +15,14 @@ function ChattingPage() {
     const checkAccess = async () => {
       const chatCookie = Cookies.get('chat_cookie');
       if (chatCookie) {
-        setHasAccess(true); // Chat cookie found, allow rendering of the page
+        setHasAccess(true);
         return;
       }
 
       const payToken = Cookies.get('pay_token');
+      console.log('Pay token:', payToken);
       if (!payToken) {
+        console.log('No pay token found, redirecting to /services');
         navigate('/services');
         return;
       }
@@ -34,22 +36,24 @@ function ChattingPage() {
           body: JSON.stringify({
             action: 'get_payment',
             email: Cookies.get('email'),
-            payment_id: payToken, // Example data, replace with actual data
+            payment_id: payToken,
           }),
         });
 
         const data = await response.json();
 
         if (data.status === "Succeeded") {
-          Cookies.set('chat_cookie', 'true', { expires: 0.0208333 }); // Set chat_cookie with a 30-second expiration
-          setHasAccess(true); // Update state to trigger re-render
+          Cookies.set('chat_cookie', 'true', { expires: 0.0208333 }); // 30 minutes expiration
+          setHasAccess(true);
           Cookies.remove('pay_token');
-
         } else {
+          console.log('Payment not succeeded, redirecting to /services');
+          Cookies.remove('access_token');
           navigate('/services');
         }
       } catch (error) {
         console.error('Error checking access:', error);
+        Cookies.remove('access_token');
         navigate('/services');
       }
     };
@@ -60,10 +64,11 @@ function ChattingPage() {
   useEffect(() => {
     const checkCookieExpiration = setInterval(() => {
       const chatCookie = Cookies.get('chat_cookie');
+      console.log('Checking chat cookie expiration:', chatCookie);
       if (!chatCookie && hasAccess) {
-        setShowPopup(true); // Show popup if chat_cookie is expired
+        setShowPopup(true);
       }
-    }, 1000); // Check every second
+    }, 1000);
 
     return () => clearInterval(checkCookieExpiration);
   }, [hasAccess]);
@@ -72,22 +77,25 @@ function ChattingPage() {
     if (showPopup) {
       const timer = setInterval(() => {
         setCountdown(prevCountdown => {
+          if (prevCountdown <= 10) {
+            Cookies.remove('access_token');
           if (prevCountdown <= 1) {
             clearInterval(timer);
             Cookies.remove('access_token');
-            navigate('/services'); // Redirect to the main page after countdown reaches 0
+            navigate('/services');
             return 0;
           }
+        }
           return prevCountdown - 1;
         });
-      }, 1000); // Countdown every second
+      }, 1000);
 
       return () => clearInterval(timer);
     }
   }, [showPopup, navigate]);
 
   if (!hasAccess) {
-    return null; // Do not render anything until checkAccess runs
+    return null;
   }
 
   return (
@@ -112,7 +120,7 @@ const popupStyle = {
   padding: '20px',
   border: '2px solid #605DEC',
   boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
-  zIndex: 1000, // Ensure the popup overlays the whole website
+  zIndex: 1000,
 };
 
 export default ChattingPage;

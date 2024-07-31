@@ -11,6 +11,7 @@ function Starter() {
       <Navbar />
       {/* <StarterPage/> */}
       <LoginSignup/>
+
       {/* <Form/> */}
     </div>
   );

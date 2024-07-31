@@ -1,11 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import AppleIcon from '@mui/icons-material/Apple';
-import GoogleIcon from '@mui/icons-material/Google';
 import Fab from '@mui/material/Fab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
@@ -22,6 +18,29 @@ function validateEmail(email) {
 function validatePassword(password) {
     return password.length >= 6;
 }
+
+const CustomInput = ({ id, placeholder, type, value, onChange, error, helperText }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', width: '350px', marginBottom: '16px' }}>
+        <input
+            id={id}
+            type={type}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            style={{
+                padding: '12px',
+                borderRadius: '4px',
+                border: error ? '1px solid red' : '1px solid #ccc',
+                fontSize: '16px',
+                backgroundColor: 'transparent',
+                height:'30px',
+                 outline: 'none',
+                boxShadow: 'none'
+            }}
+        />
+        {error && <span style={{ color: 'red', fontSize: '12px' }}>{helperText}</span>}
+    </div>
+);
 
 export default function LoginForms() {
     const navigate = useNavigate();
@@ -79,24 +98,21 @@ export default function LoginForms() {
                 <ArrowBackIcon/>
             </Fab>
 
-            <h2 style={{ marginTop: 80, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>Log in</h2>
+            <h2 style={{ marginTop: 150, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>Log in</h2>
 
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop={5} gap={2}>
-                <TextField
+                <CustomInput
                     id="email"
-                    label="E-mail"
-                    variant="outlined"
-                    sx={{ width: 350, borderRadius: 3 }}
+                    placeholder="E-mail"
+                    type="email"
                     value={email}
                     onChange={handleEmailChange}
                     error={errors.email}
                     helperText={errors.email ? 'Invalid email address' : ''}
                 />
-                <TextField
+                <CustomInput
                     id="password"
-                    label="Password"
-                    variant="outlined"
-                    sx={{ width: 350, borderRadius: 3 }}
+                    placeholder="Password"
                     type="password"
                     value={password}
                     onChange={handlePasswordChange}
@@ -115,8 +131,8 @@ export default function LoginForms() {
                         fontSize: 18, 
                         width: 350, 
                         borderRadius: 30, 
-                        backgroundColor: '#605DEC',
-                        '&:hover': { backgroundColor: '#605DEC' } 
+                        backgroundColor: '#841E60',
+                        '&:hover': { backgroundColor: '#EB7745' } 
                     }}
                 >
                     Continue {'>'}
@@ -130,64 +146,6 @@ export default function LoginForms() {
                 >
                     Don't have an account? <a href="#" style={{ color: '#461646', textDecoration: 'none' }}>Register</a>
                 </Typography>
-            </Box>
-
-            <Box display="flex" justifyContent="center" marginTop={2}>
-                <Button 
-                    variant="contained" 
-                    sx={{ 
-                        fontFamily: '"Poppins", sans-serif', 
-                        height: 60,
-                        fontWeight: 'normal', 
-                        fontSize: 18, 
-                        width: 350, 
-                        borderRadius: 30,
-                        backgroundColor: 'white', 
-                        color: 'black',
-                        boxShadow: 0
-                    }}
-                    startIcon={<FacebookIcon sx={{ color: '#1877F2' }}/>} 
-                >
-                    Sign in with Facebook
-                </Button>
-            </Box>
-
-            <Box display="flex" justifyContent="center" marginTop={2}>
-                <Button 
-                    variant="contained" 
-                    sx={{ 
-                        fontFamily: '"Poppins", sans-serif', 
-                        fontWeight: 'normal', 
-                        fontSize: 18, 
-                        width: 350, 
-                        borderRadius: 30,
-                        backgroundColor: 'white', 
-                        color: 'black',
-                        boxShadow: 0
-                    }}
-                    startIcon={<GoogleIcon sx={{ color: '#DB4437' }}/>} 
-                >
-                    Sign in with Google
-                </Button>
-            </Box>
-
-            <Box display="flex" justifyContent="center" marginTop={2}>
-                <Button 
-                    variant="contained" 
-                    sx={{ 
-                        fontFamily: '"Poppins", sans-serif', 
-                        fontWeight: 'normal', 
-                        fontSize: 18, 
-                        width: 350, 
-                        borderRadius: 30,
-                        backgroundColor: 'white', 
-                        color: 'black',
-                        boxShadow: 0
-                    }}
-                    startIcon={<AppleIcon sx={{ color: '#000000' }}/>} 
-                >
-                    Sign in with Apple
-                </Button>
             </Box>
         </div>
     );

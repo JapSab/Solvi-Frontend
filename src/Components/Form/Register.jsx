@@ -1,16 +1,11 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import AppleIcon from '@mui/icons-material/Apple';
-import GoogleIcon from '@mui/icons-material/Google';
 import Fab from '@mui/material/Fab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { BACKEND_URI } from '../../config';
-
 
 function validateEmail(email) {
   const re = /\S+@\S+\.\S+/;
@@ -25,13 +20,36 @@ function validateNumber(number) {
   return number.length === 9;
 }
 
+const CustomInput = ({ id, placeholder, type, value, onChange, error, helperText }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', width: '350px', marginBottom: '16px' }}>
+    <input
+      id={id}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      style={{
+        padding: '12px',
+        borderRadius: '4px',
+        border: error ? '1px solid red' : '1px solid #ccc',
+        fontSize: '16px',
+        backgroundColor: 'transparent',
+        outline: 'none',
+        boxShadow: 'none',
+        height:'30px'
+      }}
+    />
+    {error && <span style={{ color: 'red', fontSize: '12px' }}>{helperText}</span>}
+  </div>
+);
+
 export default function RegistrationForms() {
   const apiUrl = BACKEND_URI;
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [number, setNumber] = React.useState('');
   const navigate = useNavigate();
-  const [errors, setErrors] = React.useState({ email: false, password: false });
+  const [errors, setErrors] = React.useState({ email: false, password: false, number: false });
 
   const handleEmailChange = (event) => {
     const newEmail = event.target.value;
@@ -52,7 +70,7 @@ export default function RegistrationForms() {
   };
 
   const handleContinue = async () => {
-    if (!errors.email && !errors.password && email && password && number) {
+    if (!errors.email && !errors.password && !errors.number && email && password && number) {
       const url = `${apiUrl}/api/client/register`;  // Your API endpoint
       const data = {
         email: email,
@@ -85,41 +103,37 @@ export default function RegistrationForms() {
   return (
     <div>
       <Fab aria-label="add"
-        style={{ marginTop: 10, marginLeft: 20, boxShadow: 'none', backgroundColor: '#f6f5f800', color: '#605DEC' }}
+        style={{ marginTop: 10, marginLeft: 20, boxShadow: 'none', backgroundColor: '#f6f5f800', color: '#841E60' }}
         onClick={() => window.history.back()}
       >
         <ArrowBackIcon />
       </Fab>
 
-      <h2 style={{ marginTop: 80, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>Registration</h2>
+      <h2 style={{ marginTop: 150, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>Registration</h2>
 
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop={5} gap={2}>
-        <TextField
+        <CustomInput
           id="email"
-          label="E-mail"
-          variant="outlined"
-          sx={{ width: 350, borderRadius: 3 }}
+          placeholder="E-mail"
+          type="email"
           value={email}
           onChange={handleEmailChange}
           error={errors.email}
           helperText={errors.email ? 'Invalid email address' : ''}
         />
-        <TextField
+        <CustomInput
           id="password"
-          label="Password"
-          variant="outlined"
-          sx={{ width: 350, borderRadius: 3 }}
+          placeholder="Password"
           type="password"
           value={password}
           onChange={handlePasswordChange}
           error={errors.password}
           helperText={errors.password ? 'Password must be at least 6 characters' : ''}
         />
-        <TextField
-          id="confirm-password"
-          label="Mobile Number"
-          variant="outlined"
-          sx={{ width: 350, borderRadius: 3 }}
+        <CustomInput
+          id="number"
+          placeholder="Mobile Number"
+          type="text"
           value={number}
           onChange={handleNumberChange}
           error={errors.number}
@@ -134,9 +148,9 @@ export default function RegistrationForms() {
           fontSize: 18,
           width: 350,
           borderRadius: 30,
-          backgroundColor: '#605DEC',
+          backgroundColor: '#841E60',
           '&:hover': {
-            backgroundColor: '#2b0f2b' // darker purple color on hover
+            backgroundColor: '#EB7745' 
           }
         }}
           onClick={handleContinue}
@@ -149,10 +163,10 @@ export default function RegistrationForms() {
         <Typography variant="body2"
           onClick={() => navigate('/login')} >
 
-          Don't have an account? <a href="#" style={{ color: '#605DEC', textDecoration: 'none' }}>Log in</a>
+          Already have an account? <a href="#" style={{ color: '#841E60', textDecoration: 'none' }}>Log in</a>
         </Typography>
       </Box>
-      <Box display="flex" justifyContent="center" marginTop={2}>
+      {/* <Box display="flex" justifyContent="center" marginTop={2}>
         <Button
           variant="contained"
           sx={{
@@ -208,7 +222,7 @@ export default function RegistrationForms() {
         >
           Sign in with Apple
         </Button>
-      </Box>
+      </Box> */}
     </div>
   );
 }
