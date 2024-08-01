@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -6,6 +6,7 @@ import Fab from '@mui/material/Fab';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { BACKEND_URI } from '../../config';
+import LanguageContext from '../../utils/LanguageContext';
 
 function validateEmail(email) {
   const re = /\S+@\S+\.\S+/;
@@ -50,6 +51,23 @@ export default function RegistrationForms() {
   const [number, setNumber] = React.useState('');
   const navigate = useNavigate();
   const [errors, setErrors] = React.useState({ email: false, password: false, number: false });
+  const { language } = useContext(LanguageContext);
+
+    const content = {
+      ENG: {
+        title: 'Register',
+        continue: "continue",
+        redirect1: "Already have an account?",
+        redirect2: "Log in",
+      },
+      GEO: {
+        title: 'რეგისტრაცია',
+        continue: 'გაგრძელება',
+        redirect1: "შექმნილი გაქვთ ანგარიში?",
+        redirect2: "შესვლა",
+    
+      },
+    };
 
   const handleEmailChange = (event) => {
     const newEmail = event.target.value;
@@ -109,7 +127,7 @@ export default function RegistrationForms() {
         <ArrowBackIcon />
       </Fab>
 
-      <h2 style={{ marginTop: 150, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>Registration</h2>
+      <h2 style={{ marginTop: 150, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>{content[language].title}</h2>
 
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop={5} gap={2}>
         <CustomInput
@@ -155,7 +173,7 @@ export default function RegistrationForms() {
         }}
           onClick={handleContinue}
         >
-          Continue {'>'}
+          {content[language].continue} {'>'}
         </Button>
       </Box>
 
@@ -163,7 +181,7 @@ export default function RegistrationForms() {
         <Typography variant="body2"
           onClick={() => navigate('/login')} >
 
-          Already have an account? <a href="#" style={{ color: '#841E60', textDecoration: 'none' }}>Log in</a>
+          {content[language].redirect1} <a href="#" style={{ color: '#841E60', textDecoration: 'none' }}>{content[language].redirect2}</a>
         </Typography>
       </Box>
       {/* <Box display="flex" justifyContent="center" marginTop={2}>

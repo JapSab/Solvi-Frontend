@@ -1,10 +1,25 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import backgroundImage from '../../images/Background.png';
+import LanguageContext from '../../utils/LanguageContext';
 
 export default function LoginSignup() {
   const isAuthenticated = Boolean(localStorage.getItem('auth-token'));
+  const { language } = useContext(LanguageContext);
+
+  const content = {
+    ENG: {
+      title: 'Hello, lawyer is listening',
+      button: 'Ask a question'
+    },
+    GEO: {
+      title: 'გამარჯობა, იურისტი გისმენთ',
+      button: 'დასვი შეკითხვა'
+
+    },
+  };
+
 
   return (
     <div>
@@ -16,7 +31,7 @@ export default function LoginSignup() {
         width: '100%', // This makes the div stretch across the width of its container
         marginTop:50
       }}></div>
-      <h2 style={{ textAlign: 'center' }}>გამარჯობა, იურისტი გისმენთ</h2>
+      <h2 style={{ textAlign: 'center' }}>{content[language].title}</h2>
 
       <Box 
         display="flex" 
@@ -66,7 +81,7 @@ export default function LoginSignup() {
               }}
               onClick={() => window.location.href = '/registration'} // For the Sign Up button
             >
-              დასვი შეკითხვა
+              {content[language].button}
             </Button>
          
           </>

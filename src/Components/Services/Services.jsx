@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './Services.css';
 import { useNavigate } from 'react-router-dom';
 import PaymentConfirmationModal from './PaymentConfirmationModal'; // import the modal
 import { BACKEND_URI, FRONTEND_URI } from '../../config';
 import Cookies from 'js-cookie';
+import LanguageContext from '../../utils/LanguageContext';
 
 const Services = () => {
   const navigate = useNavigate();
@@ -11,6 +12,21 @@ const Services = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const apiUrl = BACKEND_URI;
   const frontUrl = FRONTEND_URI;
+  const { language } = useContext(LanguageContext);
+
+  const content = {
+    ENG: {
+      title: 'package',
+      minutes: 'minutes',
+      purchase: 'purchase'
+    },
+    GEO: {
+      title: 'პაკეტი',
+      minutes: 'წუთი',
+      purchase: 'ყიდვა'
+    },
+  };
+
   const handleCardClick = (packageId) => {
     setSelectedPackage(packageId);
     setIsModalOpen(true);
@@ -63,19 +79,19 @@ const Services = () => {
   return (
     <div className="card-container">
       <div className="card" onClick={() => handleCardClick(1)}>
-        <h2>Package 1</h2>
-        <p>10 GEL - 30 minutes</p>
-        <h3>Purchase</h3>
+        <h2>{content[language].title} 1</h2>
+        <p>10 GEL - 30 {content[language].minutes}</p>
+        <h3>{content[language].purchase}</h3>
       </div>
       <div className="card" onClick={() => handleCardClick(2)}>
-        <h2>Package 2</h2>
-        <p>50 GEL - 90 minutes</p>
-        <h3>Purchase</h3>
+        <h2>{content[language].title} 2</h2>
+        <p>50 GEL - 90 {content[language].minutes}</p>
+        <h3>{content[language].purchase}</h3>
       </div>
       <div className="card" onClick={() => handleCardClick(3)}>
-        <h2>Package 3</h2>
-        <p>80 GEL - 120 minutes</p>
-        <h3>Purchase</h3>
+        <h2>{content[language].title} 3</h2>
+        <p>80 GEL - 120 {content[language].minutes}</p>
+        <h3>{content[language].purchase}</h3>
       </div>
       <PaymentConfirmationModal
         open={isModalOpen}

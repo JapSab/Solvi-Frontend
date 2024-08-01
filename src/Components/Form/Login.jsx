@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/AuthContext'; // Adjust the path accordingly
 import { BACKEND_URI } from '../../config';
 import Cookies from 'js-cookie';
+import LanguageContext from '../../utils/LanguageContext';
 
 function validateEmail(email) {
     const re = /\S+@\S+\.\S+/;
@@ -49,7 +50,23 @@ export default function LoginForms() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errors, setErrors] = React.useState({ email: false, password: false });
+    const { language } = useContext(LanguageContext);
 
+    const content = {
+      ENG: {
+        title: 'Log in',
+        continue: "continue",
+        redirect1: "Don't have an account?",
+        redirect2: "Register",
+      },
+      GEO: {
+        title: 'შესვლა',
+        continue: 'გაგრძელება',
+        redirect1: "არ გაქვთ ანგარიში?",
+        redirect2: "დარეგისტრირდი",
+    
+      },
+    };
     const handleEmailChange = (event) => {
         const newEmail = event.target.value;
         setEmail(newEmail);
@@ -98,7 +115,7 @@ export default function LoginForms() {
                 <ArrowBackIcon/>
             </Fab>
 
-            <h2 style={{ marginTop: 150, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>Log in</h2>
+            <h2 style={{ marginTop: 150, textAlign: 'center', fontFamily: '"Poppins", sans-serif', fontWeight: 'normal' }}>{content[language].title}</h2>
 
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" marginTop={5} gap={2}>
                 <CustomInput
@@ -135,8 +152,8 @@ export default function LoginForms() {
                         '&:hover': { backgroundColor: '#EB7745' } 
                     }}
                 >
-                    Continue {'>'}
-                </Button>
+                    {content[language].continue} {'>'}
+                </Button>   
             </Box>
 
             <Box display="flex" justifyContent="center" marginTop={2}>
@@ -144,7 +161,7 @@ export default function LoginForms() {
                     variant="body2"
                     onClick={() => navigate('/registration')} 
                 >
-                    Don't have an account? <a href="#" style={{ color: '#461646', textDecoration: 'none' }}>Register</a>
+                    {content[language].redirect1} <a href="#" style={{ color: '#461646', textDecoration: 'none' }}>{content[language].redirect2}</a>
                 </Typography>
             </Box>
         </div>
